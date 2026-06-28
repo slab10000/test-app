@@ -62,6 +62,23 @@
     badge.style.display = n > 0 ? "grid" : "none";
   }
 
+  /* ----- "Store is migrating" notice (replaces navigation to the storefront) ----- */
+  function showStoreModal() {
+    var overlay = document.createElement("div");
+    overlay.className = "store-modal-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;z-index:1000";
+    overlay.innerHTML =
+      '<div style="background:#fff;color:#111;max-width:420px;padding:28px;border-radius:14px;text-align:center">' +
+      '<h3 style="margin:0 0 8px">\uD83D\uDEE0\uFE0F Store is being migrated</h3>' +
+      '<p style="margin:0 0 16px;color:#555">Our new storefront launches soon. Thanks for your patience!</p>' +
+      '<button class="btn btn--primary" id="storeModalClose">Got it</button></div>';
+    overlay.addEventListener("click", function (e) { if (e.target === overlay) overlay.remove(); });
+    document.body.appendChild(overlay);
+    var c = document.getElementById("storeModalClose");
+    if (c) c.addEventListener("click", function () { overlay.remove(); });
+  }
+
   /* ----- Wire everything up after DOM is ready ----- */
   function init() {
     // Highlight the active nav link based on <body data-page="...">
@@ -81,6 +98,10 @@
     if (menuBtn && links) {
       menuBtn.addEventListener("click", function () { links.classList.toggle("is-open"); });
     }
+
+    // Store is migrating: intercept the nav link and show a notice instead of navigating.
+    var storeLink = document.querySelector('.nav__link[data-nav="products"]');
+    if (storeLink) storeLink.addEventListener("click", function (e) { e.preventDefault(); showStoreModal(); });
 
     updateCartBadge();
   }
