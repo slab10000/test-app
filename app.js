@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Nimbus — shared front-end behaviour
+   Example App — shared front-end behaviour
    Loaded on every page. Page-specific logic lives in each page's own <script>.
    ========================================================================== */
 (function () {

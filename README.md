@@ -1,4 +1,4 @@
-# Nimbus — Computer-Use Test App
+# Example App — Computer-Use Test App
 
 A small, dependency-free web app for testing browser/computer-use agents
 (e.g. Google's computer use). No build step, no frameworks — just static
