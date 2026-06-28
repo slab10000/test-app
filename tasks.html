@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasks — Nimbus</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="tasks">
+
+  <!-- ============================ NAV ============================ -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a class="brand" href="index.html"><span class="brand__logo">N</span> Nimbus</a>
+      <div class="nav__links">
+        <a class="nav__link" data-nav="home" href="index.html">Home</a>
+        <a class="nav__link" data-nav="products" href="products.html">Store</a>
+        <a class="nav__link" data-nav="dashboard" href="dashboard.html">Dashboard</a>
+        <a class="nav__link" data-nav="tasks" href="tasks.html">Tasks</a>
+        <a class="nav__link" data-nav="contact" href="contact.html">Contact</a>
+      </div>
+      <div class="nav__spacer"></div>
+      <div class="nav__actions">
+        <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">🌙</button>
+        <a class="icon-btn" href="products.html" aria-label="View cart" title="Cart">🛒<span id="cartBadge" class="cart-badge" style="display:none">0</span></a>
+        <a class="btn btn--primary btn--sm" href="contact.html">Sign up</a>
+        <button id="menuToggle" class="icon-btn nav__toggle" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========================== PAGE HEAD ======================== -->
+  <section class="page-head">
+    <div class="container">
+      <span class="eyebrow">Productivity</span>
+      <h1>Tasks</h1>
+      <p class="muted">A quick to-do board. Add items, check them off, and filter the view.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:14px">
+    <div class="container" style="max-width:680px">
+      <div class="card">
+        <!-- Add -->
+        <form id="taskForm" class="task-input">
+          <input id="taskInput" class="input" type="text" placeholder="What needs doing?" aria-label="New task" autocomplete="off" />
+          <button class="btn btn--primary" type="submit">Add task</button>
+        </form>
+
+        <!-- Filters + counter -->
+        <div class="filter-row">
+          <button class="chip is-active" data-filter="all">All</button>
+          <button class="chip" data-filter="active">Active</button>
+          <button class="chip" data-filter="done">Completed</button>
+          <span class="nav__spacer"></span>
+          <span id="counter" class="muted" style="font-size:.9rem">0 of 0 done</span>
+        </div>
+
+        <!-- List -->
+        <ul id="taskList" class="task-list"></ul>
+        <p id="taskEmpty" class="empty" style="display:none">Nothing here yet. Add your first task above. ✨</p>
+
+        <div style="margin-top:16px;text-align:right">
+          <button id="clearDone" class="btn btn--ghost btn--sm">Clear completed</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container"><p class="muted mt-0">© 2026 Nimbus, Inc. · <a href="index.html">Home</a> · <a href="contact.html">Contact</a></p></div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    var STORE_KEY = "nimbus-tasks";
+    var nextId = 1;
+    var tasks = load();
+    var filter = "all";
+
+    function load() {
+      try {
+        var saved = JSON.parse(localStorage.getItem(STORE_KEY));
+        if (saved && saved.length) {
+          saved.forEach(function (t) { if (t.id >= nextId) nextId = t.id + 1; });
+          return saved;
+        }
+      } catch (e) {}
+      // seed
+      var seed = [
+        { id: 1, text: "Review the Q3 roadmap", done: true },
+        { id: 2, text: "Reply to Aisha about onboarding", done: false },
+        { id: 3, text: "Prepare demo for Friday", done: false }
+      ];
+      nextId = 4;
+      return seed;
+    }
+    function save() { localStorage.setItem(STORE_KEY, JSON.stringify(tasks)); }
+
+    var list = document.getElementById("taskList");
+
+    function render() {
+      var shown = tasks.filter(function (t) {
+        return filter === "all" || (filter === "active" && !t.done) || (filter === "done" && t.done);
+      });
+      list.innerHTML = "";
+      shown.forEach(function (t) {
+        var li = document.createElement("li");
+        li.className = "task" + (t.done ? " is-done" : "");
+        li.innerHTML =
+          '<input type="checkbox" ' + (t.done ? "checked" : "") + ' aria-label="Mark complete" data-toggle="' + t.id + '" />' +
+          '<span class="task__text">' + escapeHtml(t.text) + '</span>' +
+          '<button class="task__del" aria-label="Delete task" data-del="' + t.id + '">🗑️</button>';
+        list.appendChild(li);
+      });
+      document.getElementById("taskEmpty").style.display = tasks.length ? "none" : "block";
+      var doneCount = tasks.filter(function (t) { return t.done; }).length;
+      document.getElementById("counter").textContent = doneCount + " of " + tasks.length + " done";
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    }
+
+    // Add
+    document.getElementById("taskForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var input = document.getElementById("taskInput");
+      var text = input.value.trim();
+      if (!text) { input.focus(); return; }
+      tasks.push({ id: nextId++, text: text, done: false });
+      input.value = "";
+      save(); render();
+      toast("Task added");
+    });
+
+    // Toggle / delete (event delegation)
+    list.addEventListener("change", function (e) {
+      var id = e.target.getAttribute("data-toggle");
+      if (!id) return;
+      var t = tasks.find(function (x) { return x.id === parseInt(id, 10); });
+      if (t) { t.done = e.target.checked; save(); render(); }
+    });
+    list.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-del]");
+      if (!btn) return;
+      var id = parseInt(btn.getAttribute("data-del"), 10);
+      tasks = tasks.filter(function (x) { return x.id !== id; });
+      save(); render();
+      toast("Task deleted");
+    });
+
+    // Filters
+    document.querySelectorAll(".chip").forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        document.querySelectorAll(".chip").forEach(function (c) { c.classList.remove("is-active"); });
+        chip.classList.add("is-active");
+        filter = chip.getAttribute("data-filter");
+        render();
+      });
+    });
+
+    // Clear completed
+    document.getElementById("clearDone").addEventListener("click", function () {
+      var before = tasks.length;
+      tasks = tasks.filter(function (t) { return !t.done; });
+      save(); render();
+      toast(before === tasks.length ? "No completed tasks" : "Cleared completed tasks");
+    });
+
+    render();
+  </script>
+</body>
+</html>

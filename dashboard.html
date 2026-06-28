@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Nimbus</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="dashboard">
+
+  <!-- ============================ NAV ============================ -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a class="brand" href="index.html"><span class="brand__logo">N</span> Nimbus</a>
+      <div class="nav__links">
+        <a class="nav__link" data-nav="home" href="index.html">Home</a>
+        <a class="nav__link" data-nav="products" href="products.html">Store</a>
+        <a class="nav__link" data-nav="dashboard" href="dashboard.html">Dashboard</a>
+        <a class="nav__link" data-nav="tasks" href="tasks.html">Tasks</a>
+        <a class="nav__link" data-nav="contact" href="contact.html">Contact</a>
+      </div>
+      <div class="nav__spacer"></div>
+      <div class="nav__actions">
+        <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">🌙</button>
+        <a class="icon-btn" href="products.html" aria-label="View cart" title="Cart">🛒<span id="cartBadge" class="cart-badge" style="display:none">0</span></a>
+        <a class="btn btn--primary btn--sm" href="contact.html">Sign up</a>
+        <button id="menuToggle" class="icon-btn nav__toggle" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========================== PAGE HEAD ======================== -->
+  <section class="page-head">
+    <div class="container">
+      <span class="eyebrow">Workspace</span>
+      <h1>Dashboard</h1>
+      <p class="muted">Welcome back, Blas. Here's what's happening across your team.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:14px">
+    <div class="container">
+      <!-- Tabs -->
+      <div class="tabs" role="tablist">
+        <button class="tab is-active" role="tab" data-tab="overview">Overview</button>
+        <button class="tab" role="tab" data-tab="analytics">Analytics</button>
+        <button class="tab" role="tab" data-tab="team">Team</button>
+        <button class="tab" role="tab" data-tab="settings">Settings</button>
+      </div>
+
+      <!-- Overview -->
+      <div class="tab-panel is-active" id="tab-overview" role="tabpanel">
+        <div class="grid grid--4" style="margin-bottom:24px">
+          <div class="card stat-card"><span class="stat-card__label">Active projects</span><span class="stat-card__value">24</span><span class="trend trend--up">▲ 12% this week</span></div>
+          <div class="card stat-card"><span class="stat-card__label">Tasks completed</span><span class="stat-card__value">318</span><span class="trend trend--up">▲ 8% this week</span></div>
+          <div class="card stat-card"><span class="stat-card__label">Open issues</span><span class="stat-card__value">7</span><span class="trend trend--down">▼ 3 since Monday</span></div>
+          <div class="card stat-card"><span class="stat-card__label">Team members</span><span class="stat-card__value">12</span><span class="trend trend--up">▲ 2 new</span></div>
+        </div>
+        <div class="card">
+          <h3 class="mt-0">Recent activity</h3>
+          <table>
+            <tbody>
+              <tr><td>🚀</td><td><strong>Marco</strong> deployed <em>v3.0.1</em> to production</td><td class="muted">2m ago</td></tr>
+              <tr><td>✅</td><td><strong>Aisha</strong> closed "Onboarding redesign"</td><td class="muted">1h ago</td></tr>
+              <tr><td>💬</td><td><strong>Jamie</strong> commented on "Q3 roadmap"</td><td class="muted">3h ago</td></tr>
+              <tr><td>📄</td><td><strong>You</strong> created "Pricing experiment" doc</td><td class="muted">Yesterday</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Analytics -->
+      <div class="tab-panel" id="tab-analytics" role="tabpanel">
+        <div class="card" style="margin-bottom:24px">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+            <h3 class="mt-0">Weekly active users</h3>
+            <select class="select" id="rangeSelect" style="max-width:160px">
+              <option>Last 7 days</option>
+              <option>Last 30 days</option>
+              <option>Last quarter</option>
+            </select>
+          </div>
+          <div id="chart" style="display:flex;align-items:flex-end;gap:14px;height:180px;margin-top:18px;padding-top:10px"></div>
+        </div>
+        <div class="grid grid--3">
+          <div class="card stat-card"><span class="stat-card__label">Avg session</span><span class="stat-card__value">14m</span><span class="trend trend--up">▲ 1.2m</span></div>
+          <div class="card stat-card"><span class="stat-card__label">Bounce rate</span><span class="stat-card__value">22%</span><span class="trend trend--down">▼ 4%</span></div>
+          <div class="card stat-card"><span class="stat-card__label">Conversion</span><span class="stat-card__value">3.8%</span><span class="trend trend--up">▲ 0.5%</span></div>
+        </div>
+      </div>
+
+      <!-- Team -->
+      <div class="tab-panel" id="tab-team" role="tabpanel">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Member</th><th>Role</th><th>Status</th><th>Last active</th></tr></thead>
+            <tbody>
+              <tr><td>Aisha Khan</td><td>Head of Ops</td><td><span class="badge badge--green">Active</span></td><td class="muted">Just now</td></tr>
+              <tr><td>Marco Rossi</td><td>CTO</td><td><span class="badge badge--green">Active</span></td><td class="muted">5m ago</td></tr>
+              <tr><td>Jamie Tran</td><td>Product Manager</td><td><span class="badge badge--amber">Away</span></td><td class="muted">40m ago</td></tr>
+              <tr><td>Priya Patel</td><td>Designer</td><td><span class="badge badge--green">Active</span></td><td class="muted">12m ago</td></tr>
+              <tr><td>Tom Becker</td><td>Engineer</td><td><span class="badge badge--gray">Offline</span></td><td class="muted">2d ago</td></tr>
+              <tr><td>Lena Vogel</td><td>Support</td><td><span class="badge badge--red">On leave</span></td><td class="muted">1w ago</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="tab-panel" id="tab-settings" role="tabpanel">
+        <div class="card" style="max-width:560px">
+          <h3 class="mt-0">Workspace settings</h3>
+          <form id="settingsForm" class="form">
+            <div class="field">
+              <label for="wsName">Workspace name</label>
+              <input class="input" id="wsName" name="wsName" type="text" value="Blas's Team" />
+            </div>
+            <div class="field">
+              <label for="tz">Timezone</label>
+              <select class="select" id="tz" name="tz">
+                <option>UTC</option>
+                <option selected>Europe/Madrid</option>
+                <option>America/New_York</option>
+                <option>Asia/Tokyo</option>
+              </select>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div><strong>Email notifications</strong><div class="field__hint">Get a daily digest of activity.</div></div>
+              <label class="switch"><input type="checkbox" id="emailNotif" checked /><span class="switch__track"></span></label>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div><strong>Public profile</strong><div class="field__hint">Let anyone with the link view your profile.</div></div>
+              <label class="switch"><input type="checkbox" id="publicProfile" /><span class="switch__track"></span></label>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn--primary" type="submit">Save changes</button>
+              <button class="btn btn--ghost" type="reset">Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container"><p class="muted mt-0">© 2026 Nimbus, Inc. · <a href="index.html">Home</a> · <a href="contact.html">Contact</a></p></div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    /* ----- Tabs ----- */
+    var tabs = document.querySelectorAll(".tab");
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        tabs.forEach(function (t) { t.classList.remove("is-active"); });
+        document.querySelectorAll(".tab-panel").forEach(function (p) { p.classList.remove("is-active"); });
+        tab.classList.add("is-active");
+        document.getElementById("tab-" + tab.getAttribute("data-tab")).classList.add("is-active");
+      });
+    });
+
+    /* ----- Mini bar chart (pure CSS bars) ----- */
+    var data = { "Last 7 days": [40, 62, 55, 80, 72, 90, 68], "Last 30 days": [55, 60, 48, 75, 82, 70, 95], "Last quarter": [30, 50, 65, 60, 78, 88, 99] };
+    var labels = ["M", "T", "W", "T", "F", "S", "S"];
+    function drawChart(key) {
+      var chart = document.getElementById("chart");
+      chart.innerHTML = "";
+      data[key].forEach(function (v, i) {
+        var col = document.createElement("div");
+        col.style.cssText = "flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end";
+        col.innerHTML =
+          '<div style="width:100%;height:' + v + '%;background:linear-gradient(180deg,var(--primary),var(--accent));border-radius:6px 6px 0 0" title="' + v + 'k"></div>' +
+          '<span class="muted" style="font-size:.8rem">' + labels[i] + '</span>';
+        chart.appendChild(col);
+      });
+    }
+    document.getElementById("rangeSelect").addEventListener("change", function (e) { drawChart(e.target.value); });
+    drawChart("Last 7 days");
+
+    /* ----- Settings ----- */
+    document.getElementById("settingsForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      toast("✅ Settings saved");
+    });
+    document.getElementById("settingsForm").addEventListener("reset", function () {
+      setTimeout(function () { toast("Settings reset to defaults"); }, 0);
+    });
+  </script>
+</body>
+</html>

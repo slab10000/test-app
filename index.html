@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nimbus — The workspace for teams who ship</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="home">
+
+  <!-- ============================ NAV ============================ -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a class="brand" href="index.html"><span class="brand__logo">N</span> Nimbus</a>
+      <div class="nav__links">
+        <a class="nav__link" data-nav="home" href="index.html">Home</a>
+        <a class="nav__link" data-nav="products" href="products.html">Store</a>
+        <a class="nav__link" data-nav="dashboard" href="dashboard.html">Dashboard</a>
+        <a class="nav__link" data-nav="tasks" href="tasks.html">Tasks</a>
+        <a class="nav__link" data-nav="contact" href="contact.html">Contact</a>
+      </div>
+      <div class="nav__spacer"></div>
+      <div class="nav__actions">
+        <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">🌙</button>
+        <a class="icon-btn" href="products.html" aria-label="View cart" title="Cart">🛒<span id="cartBadge" class="cart-badge" style="display:none">0</span></a>
+        <a class="btn btn--primary btn--sm" href="contact.html">Sign up</a>
+        <button id="menuToggle" class="icon-btn nav__toggle" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================ HERO ============================ -->
+  <header class="hero">
+    <span class="blob blob--1"></span>
+    <span class="blob blob--2"></span>
+    <div class="container hero__grid">
+      <div>
+        <span class="eyebrow">New · Nimbus 3.0</span>
+        <h1>The workspace for teams who ship.</h1>
+        <p class="hero__lead">Plan, track, and launch your work from one calm place. Nimbus brings docs, tasks, and analytics together so your team stays in flow.</p>
+        <div class="hero__cta">
+          <a class="btn btn--primary btn--lg" href="contact.html">Start free trial</a>
+          <a class="btn btn--secondary btn--lg" href="dashboard.html">View live demo</a>
+        </div>
+        <div class="stat-row">
+          <div><div class="stat__num">12k+</div><div class="stat__label">Teams onboard</div></div>
+          <div><div class="stat__num">99.98%</div><div class="stat__label">Uptime</div></div>
+          <div><div class="stat__num">4.9/5</div><div class="stat__label">Avg. rating</div></div>
+        </div>
+      </div>
+
+      <div class="hero__panel">
+        <h3 class="mt-0">Get early access</h3>
+        <p class="muted">Drop your email and we'll send an invite.</p>
+        <form id="leadForm" class="form" novalidate>
+          <div class="field">
+            <label for="leadEmail">Work email</label>
+            <input class="input" id="leadEmail" name="email" type="email" placeholder="you@company.com" autocomplete="email" required />
+          </div>
+          <button class="btn btn--primary btn--block" type="submit">Request invite</button>
+          <p class="field__hint center">No spam. Unsubscribe anytime.</p>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================== FEATURES ========================= -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="center" style="max-width:620px;margin:0 auto 40px">
+        <span class="eyebrow">Why Nimbus</span>
+        <h2>Everything your team needs, nothing it doesn't</h2>
+        <p class="muted">Thoughtfully designed tools that work the way you already think.</p>
+      </div>
+      <div class="grid grid--3">
+        <div class="card feature">
+          <div class="feature__icon">⚡</div>
+          <h3>Lightning fast</h3>
+          <p class="muted">Sub-50ms interactions. Your tools should never make you wait.</p>
+        </div>
+        <div class="card feature">
+          <div class="feature__icon">🔒</div>
+          <h3>Secure by default</h3>
+          <p class="muted">SOC 2 Type II, SSO, and granular permissions out of the box.</p>
+        </div>
+        <div class="card feature">
+          <div class="feature__icon">📊</div>
+          <h3>Real-time analytics</h3>
+          <p class="muted">Live dashboards that turn your activity into clear insight.</p>
+        </div>
+        <div class="card feature">
+          <div class="feature__icon">🤝</div>
+          <h3>Built for teams</h3>
+          <p class="muted">Comments, mentions, and shared views keep everyone aligned.</p>
+        </div>
+        <div class="card feature">
+          <div class="feature__icon">🧩</div>
+          <h3>100+ integrations</h3>
+          <p class="muted">Connect the tools you already love in a couple of clicks.</p>
+        </div>
+        <div class="card feature">
+          <div class="feature__icon">🌙</div>
+          <h3>Easy on the eyes</h3>
+          <p class="muted">A polished dark mode that respects your late nights.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= TESTIMONIAL ======================= -->
+  <section class="section" style="background:var(--surface-2)">
+    <div class="container">
+      <div class="center" style="max-width:620px;margin:0 auto 36px">
+        <span class="eyebrow">Loved by builders</span>
+        <h2>Don't just take our word for it</h2>
+      </div>
+      <div class="grid grid--3">
+        <div class="card">
+          <p class="quote">"Nimbus replaced four tools for us. Onboarding took an afternoon and the whole team actually enjoys using it."</p>
+          <div class="quote__author"><span class="avatar">AK</span><div><strong>Aisha Khan</strong><div class="muted" style="font-size:.85rem">Head of Ops, Lumen</div></div></div>
+        </div>
+        <div class="card">
+          <p class="quote">"The analytics tab alone is worth the price. We finally have one source of truth for our roadmap."</p>
+          <div class="quote__author"><span class="avatar">MR</span><div><strong>Marco Rossi</strong><div class="muted" style="font-size:.85rem">CTO, Driftwood</div></div></div>
+        </div>
+        <div class="card">
+          <p class="quote">"Fast, calm, and reliable. It's rare that software gets out of your way like this does."</p>
+          <div class="quote__author"><span class="avatar">JT</span><div><strong>Jamie Tran</strong><div class="muted" style="font-size:.85rem">PM, Northwind</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ CTA ============================ -->
+  <section class="section">
+    <div class="container">
+      <div class="card center" style="padding:48px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;color:#fff">
+        <h2 style="color:#fff">Ready to bring your team into flow?</h2>
+        <p style="opacity:.9;max-width:48ch;margin:0 auto 22px">Start a free 14-day trial. No credit card required.</p>
+        <div class="hero__cta" style="justify-content:center">
+          <a class="btn btn--lg" style="background:#fff;color:var(--primary)" href="contact.html">Get started free</a>
+          <a class="btn btn--lg btn--ghost" style="color:#fff;border-color:rgba(255,255,255,.5)" href="products.html">Browse plans</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== FOOTER ========================== -->
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__col">
+        <a class="brand" href="index.html"><span class="brand__logo">N</span> Nimbus</a>
+        <p class="muted" style="max-width:30ch">The collaborative workspace for teams who ship.</p>
+      </div>
+      <div class="footer__col">
+        <strong>Product</strong>
+        <a href="products.html">Store</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="tasks.html">Tasks</a>
+      </div>
+      <div class="footer__col">
+        <strong>Company</strong>
+        <a href="contact.html">Contact</a>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer__col">
+        <strong>Legal</strong>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    // Hero email capture
+    document.getElementById("leadForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var email = document.getElementById("leadEmail");
+      if (!email.value || !email.checkValidity()) {
+        email.focus();
+        toast("Please enter a valid email");
+        return;
+      }
+      toast("🎉 Thanks! Invite sent to " + email.value);
+      email.value = "";
+    });
+  </script>
+</body>
+</html>

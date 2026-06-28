@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Store — Nimbus</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="products">
+
+  <!-- ============================ NAV ============================ -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a class="brand" href="index.html"><span class="brand__logo">N</span> Nimbus</a>
+      <div class="nav__links">
+        <a class="nav__link" data-nav="home" href="index.html">Home</a>
+        <a class="nav__link" data-nav="products" href="products.html">Store</a>
+        <a class="nav__link" data-nav="dashboard" href="dashboard.html">Dashboard</a>
+        <a class="nav__link" data-nav="tasks" href="tasks.html">Tasks</a>
+        <a class="nav__link" data-nav="contact" href="contact.html">Contact</a>
+      </div>
+      <div class="nav__spacer"></div>
+      <div class="nav__actions">
+        <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">🌙</button>
+        <button id="cartOpen" class="icon-btn" aria-label="View cart" title="Cart">🛒<span id="cartBadge" class="cart-badge" style="display:none">0</span></button>
+        <a class="btn btn--primary btn--sm" href="contact.html">Sign up</a>
+        <button id="menuToggle" class="icon-btn nav__toggle" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========================== PAGE HEAD ======================== -->
+  <section class="page-head">
+    <div class="container">
+      <span class="eyebrow">Store</span>
+      <h1>Plans &amp; add-ons</h1>
+      <p class="muted">Pick what your team needs. Add items to your cart and check out.</p>
+    </div>
+  </section>
+
+  <!-- =========================== CATALOG ========================= -->
+  <section class="section" style="padding-top:20px">
+    <div class="container">
+      <div class="toolbar">
+        <input id="search" class="input search" type="search" placeholder="🔍  Search products…" aria-label="Search products" />
+        <select id="category" class="select" aria-label="Filter by category" style="max-width:200px">
+          <option value="all">All categories</option>
+          <option value="plan">Plans</option>
+          <option value="addon">Add-ons</option>
+          <option value="hardware">Hardware</option>
+        </select>
+        <button id="cartOpen2" class="btn btn--secondary">🛒 Cart (<span id="cartCountInline">0</span>)</button>
+      </div>
+
+      <div id="grid" class="grid grid--3"></div>
+      <p id="noResults" class="empty" style="display:none">No products match your search.</p>
+    </div>
+  </section>
+
+  <!-- ========================== CART MODAL ======================= -->
+  <div id="cartModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+    <div class="modal">
+      <div class="modal__head">
+        <h3 id="cartTitle" class="mt-0">Your cart</h3>
+        <button id="cartClose" class="modal__close" aria-label="Close">×</button>
+      </div>
+      <div id="cartLines"></div>
+      <div class="cart-total"><span>Total</span><span id="cartTotal">$0</span></div>
+      <button id="checkout" class="btn btn--primary btn--block">Checkout</button>
+      <button id="clearCart" class="btn btn--ghost btn--block" style="margin-top:8px">Clear cart</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container"><p class="muted mt-0">© 2026 Nimbus, Inc. · <a href="index.html">Home</a> · <a href="contact.html">Contact</a></p></div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    var PRODUCTS = [
+      { id: "starter",  name: "Starter Plan",     cat: "plan",     price: 0,   emoji: "🌱", bg: "#11c39a", desc: "For individuals. Up to 3 projects." },
+      { id: "pro",      name: "Pro Plan",         cat: "plan",     price: 12,  emoji: "🚀", bg: "#5b5bf6", desc: "For growing teams. Unlimited projects." },
+      { id: "business", name: "Business Plan",    cat: "plan",     price: 29,  emoji: "🏢", bg: "#7c3aed", desc: "SSO, audit logs, priority support." },
+      { id: "storage",  name: "Extra Storage",    cat: "addon",    price: 5,   emoji: "💾", bg: "#0ea5e9", desc: "+100 GB of shared storage." },
+      { id: "analytics",name: "Analytics Boost",  cat: "addon",    price: 8,   emoji: "📈", bg: "#f5a524", desc: "Advanced reports & exports." },
+      { id: "ai",       name: "AI Assistant",     cat: "addon",    price: 15,  emoji: "🤖", bg: "#e5484d", desc: "Smart summaries and autodrafts." },
+      { id: "keyboard", name: "Nimbus Keyboard",  cat: "hardware", price: 89,  emoji: "⌨️", bg: "#334155", desc: "Mechanical, hot-swappable keys." },
+      { id: "dock",     name: "Focus Dock",       cat: "hardware", price: 49,  emoji: "🔌", bg: "#0f766e", desc: "USB-C hub with status light." },
+      { id: "mug",      name: "Cloud Mug",        cat: "hardware", price: 14,  emoji: "☕", bg: "#b45309", desc: "Keeps your coffee at flow temp." }
+    ];
+
+    var CART_ITEMS_KEY = "nimbus-cart-items";
+    function loadCart() { try { return JSON.parse(localStorage.getItem(CART_ITEMS_KEY)) || {}; } catch (e) { return {}; } }
+    function saveCart(c) { localStorage.setItem(CART_ITEMS_KEY, JSON.stringify(c)); syncBadge(c); }
+    function cartCount(c) { return Object.values(c).reduce(function (a, b) { return a + b; }, 0); }
+    function syncBadge(c) {
+      var n = cartCount(c);
+      window.nimbusCart.set(n);
+      document.getElementById("cartCountInline").textContent = n;
+    }
+
+    var grid = document.getElementById("grid");
+    function render() {
+      var q = document.getElementById("search").value.trim().toLowerCase();
+      var cat = document.getElementById("category").value;
+      var matches = PRODUCTS.filter(function (p) {
+        var okCat = cat === "all" || p.cat === cat;
+        var okQ = !q || p.name.toLowerCase().indexOf(q) !== -1 || p.desc.toLowerCase().indexOf(q) !== -1;
+        return okCat && okQ;
+      });
+      grid.innerHTML = "";
+      matches.forEach(function (p) {
+        var card = document.createElement("div");
+        card.className = "card product";
+        card.innerHTML =
+          '<div class="product__media" style="background:' + p.bg + '">' + p.emoji + '</div>' +
+          '<h3>' + p.name + '</h3>' +
+          '<p class="muted" style="font-size:.9rem">' + p.desc + '</p>' +
+          '<div class="product__foot">' +
+            '<span class="product__price">' + (p.price === 0 ? "Free" : "$" + p.price) + '</span>' +
+            '<button class="btn btn--primary btn--sm" data-add="' + p.id + '">Add to cart</button>' +
+          '</div>';
+        grid.appendChild(card);
+      });
+      document.getElementById("noResults").style.display = matches.length ? "none" : "block";
+    }
+
+    grid.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-add]");
+      if (!btn) return;
+      var id = btn.getAttribute("data-add");
+      var prod = PRODUCTS.find(function (p) { return p.id === id; });
+      if (!prod) return;
+      var cart = loadCart();
+      cart[id] = (cart[id] || 0) + 1;
+      saveCart(cart);
+      toast("Added " + prod.name + " to cart");
+    });
+
+    document.getElementById("search").addEventListener("input", render);
+    document.getElementById("category").addEventListener("change", render);
+
+    /* ----- Cart modal ----- */
+    var modal = document.getElementById("cartModal");
+    function openCart() { renderCart(); modal.classList.add("is-open"); }
+    function closeCart() { modal.classList.remove("is-open"); }
+    function renderCart() {
+      var cart = loadCart();
+      var lines = document.getElementById("cartLines");
+      var ids = Object.keys(cart);
+      if (!ids.length) { lines.innerHTML = '<p class="empty">Your cart is empty.</p>'; document.getElementById("cartTotal").textContent = "$0"; return; }
+      var total = 0;
+      lines.innerHTML = ids.map(function (id) {
+        var p = PRODUCTS.find(function (x) { return x.id === id; });
+        if (!p) return "";
+        var sub = p.price * cart[id];
+        total += sub;
+        return '<div class="cart-line"><span>' + p.emoji + ' ' + p.name + ' × ' + cart[id] + '</span><strong>' + (sub === 0 ? "Free" : "$" + sub) + '</strong></div>';
+      }).join("");
+      document.getElementById("cartTotal").textContent = "$" + total;
+    }
+
+    document.getElementById("cartOpen").addEventListener("click", openCart);
+    document.getElementById("cartOpen2").addEventListener("click", openCart);
+    document.getElementById("cartClose").addEventListener("click", closeCart);
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeCart(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeCart(); });
+    document.getElementById("clearCart").addEventListener("click", function () { saveCart({}); renderCart(); toast("Cart cleared"); });
+    document.getElementById("checkout").addEventListener("click", function () {
+      var cart = loadCart();
+      if (!cartCount(cart)) { toast("Your cart is empty"); return; }
+      saveCart({}); renderCart(); closeCart(); toast("✅ Order placed! Thank you.");
+    });
+
+    // init
+    syncBadge(loadCart());
+    render();
+  </script>
+</body>
+</html>
